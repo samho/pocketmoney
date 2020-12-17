@@ -21,17 +21,23 @@ class Storex:
         if os.path.exists("%s/%s" % (config.TEMP_DOWNLOAD_PATH, file_name)):
             os.remove("%s/%s" % (config.TEMP_DOWNLOAD_PATH, file_name))
 
-        chromeoptions = webdriver.ChromeOptions()
-        prefs = {'profile.default_content_settings.popups': 0, 'download.default_directory': config.TEMP_DOWNLOAD_PATH}
-        chromeoptions.add_experimental_option('prefs', prefs)
+        ### For Chrome Browser
+        # chromeoptions = webdriver.ChromeOptions()
+        # prefs = {'profile.default_content_settings.popups': 0, 'download.default_directory': config.TEMP_DOWNLOAD_PATH}
+        # chromeoptions.add_experimental_option('prefs', prefs)
+        # chrome_driver_path = config.basedir + os.sep + "res" + os.sep + "chromedriver"
+        # driver = webdriver.Chrome(chrome_driver_path, options=chromeoptions)
 
-        chrome_driver_path = config.basedir + os.sep + "res" + os.sep + "chromedriver"
+        ### For Firefox Browser
+        fp = webdriver.FirefoxProfile()
+        fp.set_preference("browser.download.folderList", 0)
+        fp.set_preference("browser.download.manager.showhenStarting", False)
+        fp.set_preference("browser.download.dir", config.TEMP_DOWNLOAD_PATH)
+        fp.set_preference("browser.helperApps.neverAsk.saveToDisk", "applaction/pdf")
+        driver = webdriver.Firefox(firefox_profile=fp)
 
-        driver = webdriver.Chrome(chrome_driver_path, options=chromeoptions)
         driver.maximize_window()
-
         driver.get(url)
-
         driver.implicitly_wait(20)
 
         # normal_download_btn = driver.find_element_by_id("method_free")
