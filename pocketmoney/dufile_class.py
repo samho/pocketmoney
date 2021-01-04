@@ -22,14 +22,19 @@ class DuFile:
         # chromeOptions.add_argument("--proxy-server=http://125.59.157.236:80")
         # driver = webdriver.Chrome(chrome_options=chromeOptions)
         # driver = self.get_webdriver()
-        driver = webdriver.Chrome()
+        ### For Chrome Browser
+        chromeoptions = webdriver.ChromeOptions()
+        prefs = {'profile.default_content_settings.popups': 0, 'download.default_directory': config.TEMP_DOWNLOAD_PATH}
+        chromeoptions.add_experimental_option('prefs', prefs)
+        chrome_driver_path = config.basedir + os.sep + "res" + os.sep + "chromedriver_mac"
+        driver = webdriver.Chrome(chrome_driver_path, options=chromeoptions)
         driver.maximize_window()
 
 
         # self.driver.get("http://dufile.com/file/3a3637a24a3daf43.html")
         driver.get(url)
 
-        driver.implicitly_wait(60)
+        # driver.implicitly_wait(60)
 
         normal_download_btn = WebDriverWait(driver, 30).until(expected_conditions.element_to_be_clickable((By.ID, "slow_button")))
         normal_download_btn.click()
@@ -108,18 +113,18 @@ class DuFile:
     def download_file(self, url):
 
         # ip_port = '123.134.227.114:4945'  # 从api中提取出来的代理IP:PORT
-        ip_port = requests.get("http://api.qingtingip.com/ip?app_key=4d31063caf1a3e19434ddd7e980a04e6&num=1&ptc=socks5&fmt=text&port=0&mr=2").text
-        username = 'samhocngz@163.com'
-        password = 'Go4Samho123'
-
-        headers = {
-            'Proxy-Authorization': 'Basic %s' % (self.base_code(username, password))
-        }
-
-        proxy = {
-            'http': 'socks5://{}'.format(ip_port),
-            'https': 'socks5://{}'.format(ip_port)
-        }
+        # ip_port = requests.get("http://api.qingtingip.com/ip?app_key=4d31063caf1a3e19434ddd7e980a04e6&num=1&ptc=socks5&fmt=text&port=0&mr=2").text
+        # username = 'samhocngz@163.com'
+        # password = 'Go4Samho123'
+        #
+        # headers = {
+        #     'Proxy-Authorization': 'Basic %s' % (self.base_code(username, password))
+        # }
+        #
+        # proxy = {
+        #     'http': 'socks5://{}'.format(ip_port),
+        #     'https': 'socks5://{}'.format(ip_port)
+        # }
 
         # download_obj = requests.get(url, proxies=proxy, headers=headers)
         download_obj = requests.get(url)
@@ -142,5 +147,7 @@ class DuFile:
 
 if __name__ == "__main__":
     dufile = DuFile()
-    dufile.run("http://dufile.com/file/e02b3dd607799732.html")
+    # dufile.run("http://dufile.com/file/e02b3dd607799732.html") # tmux
+    dufile.run("http://dufile.com/file/bcb783708d4c8a46.html")  # Vim
+
     # dufile.download_file("http://ss3.sufile.net:3637/down/Linux-101-Hacks.pdf?key=lEP%2BAFfsgQIFmMvfneh%2BCUee2TytOG0DzoLSDQGcD1YjLGVKqKsKsLLGKfl4GGpl5kQdiFhd7PSbY3sn%2FbDRdqzGMWmwm8Jk24aMrQHDqBoYUGuFSuQMo5uGtGFjeeVhg%2FFDKKyTLlpliXY4H%2Fu2rEeerNLoTWQN")
