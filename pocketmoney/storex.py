@@ -39,20 +39,19 @@ class Storex:
 
         driver.maximize_window()
         driver.get(url)
-        driver.add_cookie({'domain': 'storex.cc', 'expiry': 1641611284, 'httpOnly': False, 'name': 'gdpr-cookie-consent', 'path': '/', 'secure': False, 'value': 'true'})
         driver.implicitly_wait(20)
         cur_cookies = driver.get_cookies()
         print(cur_cookies)
 
         # normal_download_btn = driver.find_element_by_id("method_free")
         normal_download_btn = WebDriverWait(driver, 30).until(expected_conditions.element_to_be_clickable((By.ID, "method_free")))
-        cur_cookies = driver.get_cookies()
-        print(cur_cookies)
-        cur_cookies = driver.get_cookies()
-        print(cur_cookies)
-        # agree_div = driver.find_element_by_id("gdpr-cookie-notice")
+        agree_div = driver.find_elements_by_id("gdpr-cookie-notice")
+        btn = agree_div[0].find_elements_by_xpath("./input")
+        btn[0].click()
+
         # if agree_div.is_displayed():
-        #     cookie_agree_btn = WebDriverWait(driver, 30).until(expected_conditions.element_to_be_clickable((By.XPATH, "/html/body/div[4]/input")))
+        #     cookie_agree_btn = WebDriverWait(driver, 30).until(expected_conditions.element_to_be_clickable((By.XPATH, "//div[@id='gdpr-cookie-notice']/input")))
+        #     print(cookie_agree_btn.text)
         #     cookie_agree_btn.click()
         cur_cookies = driver.get_cookies()
         print(cur_cookies)
@@ -104,10 +103,10 @@ class Storex:
 
 if __name__ == "__main__":
 
-    for i in range(10):
+    for i in range(1):
         storex = Storex()
         download_url = config.STOREX_DOWNLOAD_LIST[random.randint(1, len(config.STOREX_DOWNLOAD_LIST))-1]
         print(download_url)
         storex.run(download_url)
         print("Start to sleep .....")
-        time.sleep(600)
+        # time.sleep(600)
