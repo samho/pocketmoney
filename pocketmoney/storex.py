@@ -40,11 +40,10 @@ class Storex:
         driver.maximize_window()
         driver.get(url)
         driver.implicitly_wait(20)
-        cur_cookies = driver.get_cookies()
-        print(cur_cookies)
 
         # normal_download_btn = driver.find_element_by_id("method_free")
         normal_download_btn = WebDriverWait(driver, 30).until(expected_conditions.element_to_be_clickable((By.ID, "method_free")))
+        driver.save_screenshot(config.basedir + os.sep + "res" + os.sep + "test.jpg")
         agree_div = driver.find_elements_by_id("gdpr-cookie-notice")
         btn = agree_div[0].find_elements_by_xpath("./input")
         btn[0].click()
